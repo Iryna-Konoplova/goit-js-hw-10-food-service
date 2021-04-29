@@ -1,5 +1,22 @@
 import './styles.css';
 
+import menuTemplate from './templates/menu.hbs';
+import menu from './menu.json';
+
+console.log(menuTemplate(menu[2]))
+
+const menuContainer = document.querySelector('.js-menu');
+const menuMarkup = createMenuCardMarkup(menu);
+
+menuContainer.insertAdjacentHTML('beforeend', menuMarkup);
+
+function createMenuCardMarkup(menu) {
+    // return menu.map(menuTemplate).join('');
+    return menuTemplate(menu);
+}
+
+
+
 const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
