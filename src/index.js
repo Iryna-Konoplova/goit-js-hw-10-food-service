@@ -1,41 +1,51 @@
 import './styles.css';
 
 import menuTemplate from './templates/menu.hbs';
+
 import menu from './menu.json';
 
-console.log(menuTemplate(menu[2]))
 
+const body = document.querySelector('body');
+const themeSwitch = document.querySelector('.theme-switch__toggle');
 const menuContainer = document.querySelector('.js-menu');
-const menuMarkup = createMenuCardMarkup(menu);
-
-menuContainer.insertAdjacentHTML('beforeend', menuMarkup);
-
-function createMenuCardMarkup(menu) {
-    // return menu.map(menuTemplate).join('');
-    return menuTemplate(menu);
-}
-
-
 
 const Theme = {
   LIGHT: 'light-theme',
   DARK: 'dark-theme',
 };
 
-const body = document.querySelector('body');
-const themeSwitch = document.querySelector('.theme-switch__toggle');
 themeSwitch.addEventListener('change', onToggleSwitchChange)
 
+setThemeOflocalStorage();
+
+const menuMarkup = createMenuCardMarkup(menu);
+
+menuContainer.insertAdjacentHTML('beforeend', menuMarkup);
+
 function onToggleSwitchChange(e) {
-    if (!body.classList.contains('dark-theme')) {
-        body.classList.add('dark-theme');
-        localStorage.setItem( 'Theme', 'dark-theme');
-        
+    if (!e.currentTarget.checked) {
+        body.classList.add(Theme.LIGHT);
+        body.classList.remove(Theme.DARK);
+        localStorage.setItem( 'Theme', Theme.LIGHT);
     } else {
-       body.classList.remove('dark-theme');
-        body.classList.add('light-theme');
-        localStorage.setItem( 'Theme', 'light-theme');
+        body.classList.add(Theme.DARK);
+        body.classList.remove(Theme.LIGHT);
+        localStorage.setItem( 'Theme', Theme.DARK);
     }
-   
-  
+}
+
+function setThemeOflocalStorage() {
+    const savedTheme = localStorage.getItem('Theme');
+
+    if (savedTheme) {
+       body.classList.add(savedTheme); 
+    }
+
+    if (savedTheme === Theme.DARK) {
+        themeSwitch.checked = true;
+    }
+}
+
+function createMenuCardMarkup(menu) {
+    return menuTemplate(menu);
 }
